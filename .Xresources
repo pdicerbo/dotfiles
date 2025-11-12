@@ -1,0 +1,86 @@
+URxvt*depth: 32
+URxvt*scrollBar: false
+URxvt.font: xft:JetBrainsMono Nerd Font:size=8,xft:Symbols Nerd Font:size=6,xft:Noto Sans Symbols 2:size=8
+URxvt*termName: rxvt
+
+URxvt*geometry:         185x55
+URxvt*saveLines:        2000
+URxvt*title: URxvt
+URxvt.cursorBlink: 1
+URxvt.cursorUnderline: 1
+
+
+! special
+URxvt.foreground:   #c5c8c6
+URxvt.background:   [85]#111315
+URxvt.cursorColor:  #0B9DED
+
+! black
+URxvt.color0:       #1c1e21
+URxvt.color8:       #969896
+
+! red
+URxvt.color1:       #cc5d56
+URxvt.color9:       #cc160b
+
+! green
+URxvt.color2:       #42885d
+URxvt.color10:      #07a124
+
+! yellow
+URxvt.color3:       #fba268
+URxvt.color11:      #fb6300
+
+! blue
+URxvt.color4:       #5081ed
+URxvt.color12:      #175aed
+
+! magenta
+URxvt.color5:       #3b8fcf
+URxvt.color13:      #0b69c7
+
+! cyan
+URxvt.color6:       #00bae9
+URxvt.color14:      #0b9ded
+
+! white
+URxvt.color7:       #95b6c8
+URxvt.color15:      #add1ff
+
+
+URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select,fullscreen,selection-to-clipboard,resize-font
+URxvt.resize-font.step: 1
+URxvt.url-select.launcher:  chromium
+URxvt.matcher.button: 1
+URxvt.url-select.underline: true
+URxvt.keysym.M-s:           perl:keyboard-select:search
+URxvt.iso14755: false
+URxvt.clipboard.copycmd:  xsel -i -b
+URxvt.clipboard.pastecmd: xsel -o -b
+URxvt.keysym.C-C: perl:clipboard:copy
+URxvt.keysym.C-V: perl:clipboard:paste
+URxvt.keysym.C-A-V: perl:clipboard:paste_escaped
+
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+
+URxvt.keysym.C-Return: \033[1;5M
+URxvt.keysym.Shift-Up: \033[1;2A
+URxvt.keysym.Shift-Down: \033[1;2B
+URxvt.keysym.Shift-Left: \033[1;2D
+URxvt.keysym.Shift-Right: \033[1;2C
+
+URxvt.keysym.C-minus:     resize-font:smaller
+URxvt.keysym.C-plus:      resize-font:bigger
+URxvt.keysym.C-equal:     resize-font:reset
+URxvt.keysym.C-question:  resize-font:show
+
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+URxvt.secondaryWheel: 1
+URxvt.keysym.Tab: \011
+
+URxvt.keysym.F11: perl:fullscreen:switch
+URxvt.pointerShape: xterm
+Xcursor.size: 10
