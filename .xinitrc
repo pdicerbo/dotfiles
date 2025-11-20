@@ -49,9 +49,8 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 export EDITOR=vim
-# export EDITOR=gedit
-# setxkbmap -layout it
-/usr/bin/VBoxClient-all &
+# /usr/bin/VBoxClient-all &     # inside Virtualbox uncomment this line
+/usr/bin/vmware-user-suid-wrapper &
 
 # decomment next line if you want to use
 # US keyboard layout and you want to be able

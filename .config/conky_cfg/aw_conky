@@ -93,13 +93,13 @@ ${alignr}$font network -─┘
 # ${alignr}$font < ${tcp_portmon 32768 61000 rhost 0} ${alignr} ${tcp_portmon 32768 61000 rservice 0} > -─┤    │       
 # ${alignr}$font < ${tcp_portmon 32768 61000 rhost 1} ${alignr} ${tcp_portmon 32768 61000 rservice 1} > -─┤    │       
 # ${alignr}$font < ${tcp_portmon 32768 61000 rhost 2} ${alignr} ${tcp_portmon 32768 61000 rservice 2} > -─┤    │       
-${if_existing /proc/net/route enp0s3}${alignr}$font < ${addr enp0s3} >   IP -─┤       
-${alignr}$font < ${downspeed enp0s3}/s > down -─┤       
-${alignr}$font < ${downspeedgraph enp0s3 8,120 8b2132 fe8608} > -─┤    │       
-${alignr}$font < ${totaldown enp0s3} > TotDown -─┘    │       
-${alignr}$font < ${upspeed enp0s3}/s >   up -─┘       
-${alignr}$font < ${upspeedgraph enp0s3 8,120 8b2132 fe8608} > -─┤            
-${alignr}$font < ${totalup enp0s3} > TotUp -─┘            
+${if_existing /proc/net/route ens33}${alignr}$font < ${addr ens33} >   IP -─┤       
+${alignr}$font < ${downspeed ens33}/s > down -─┤       
+${alignr}$font < ${downspeedgraph ens33 8,120 8b2132 fe8608} > -─┤    │       
+${alignr}$font < ${totaldown ens33} > TotDown -─┘    │       
+${alignr}$font < ${upspeed ens33}/s >   up -─┘       
+${alignr}$font < ${upspeedgraph ens33 8,120 8b2132 fe8608} > -─┤            
+${alignr}$font < ${totalup ens33} > TotUp -─┘            
 ${else}${alignr}${alignr}$font  ESSID -─┤       
 ${alignr}$font < ${wireless_essid wlp2s0} > -─┘    │       
 ${alignr}$font   IP -─┤       
