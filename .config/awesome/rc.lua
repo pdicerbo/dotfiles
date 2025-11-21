@@ -282,6 +282,28 @@ end
 -- Call the function on startup
 start_terminal_with_tmux()
 
+-- Spawn your terminals with unique WM_CLASS or window name
+awful.spawn('alacritty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
+awful.spawn('alacritty --class Htop -e htop')
+awful.spawn('kitty --class WorkTerm')
+
+-- Place them when they appear
+client.connect_signal("manage", function(c)
+    if c.class == "Unimatrix" then
+        c.floating = true
+        c:geometry({ x = 30, y = 50, width = 960, height = 540 })
+    elseif c.class == "Htop" then
+        c.floating = true
+        c:geometry({ x = 30, y = 1430, width = 580, height = 640 })
+    elseif c.class == "WorkTerm" then
+        c.floating = true
+        c:geometry({ x = 700, y = 740, width = 2440, height = 1340 })
+    end
+end)
+
+--//////////////////////////////////////////////////////////////////////
+--                      WALLPAPER SECTION
+--//////////////////////////////////////////////////////////////////////
 local current_wall_indices = {
     [aonix_wall_dir] = 0,
     [wallpapers_dir] = 0,
@@ -514,8 +536,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     -- awful.key({ modkey }, "x", function () awful.spawn("urxvt -geometry 350x100 -e tmux", { floating  = true, placement = awful.placement.centered, }) end,
-    awful.key({ modkey }, "x", function () awful.spawn("alacritty -o 'window.dimensions = { columns = 350, lines = 100 }' -e tmux", { floating  = true, placement = awful.placement.centered, }) end,
-          {description = "open a tmux session into a bigger alacritty terminal", group = "launcher"}),
+    -- awful.key({ modkey }, "x", function () awful.spawn("alacritty -o 'window.dimensions = { columns = 350, lines = 100 }' -e tmux", { floating  = true, placement = awful.placement.centered, }) end,
+    --      {description = "open a tmux session into a bigger alacritty terminal", group = "launcher"}),
+    awful.key({ modkey }, "x", function () awful.spawn("kitty -o initial_window_width=2500 -o initial_window_height=1500 -o remember_window_size=no", { floating  = true, placement = awful.placement.centered, }) end,
+          {description = "open a kitty instance", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "x", function () awful.spawn.with_shell("central_tdrop_toggle") end,
           {description = "toggle centralized urxvt dropdown terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
