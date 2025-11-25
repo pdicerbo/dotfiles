@@ -17,6 +17,7 @@ code_utils
 docker_metrics_collector
 extra
 feed_simulator
+old-pdc-home
 prj_0lf_benchmarks
 prj_0lf_test
 project_builder
