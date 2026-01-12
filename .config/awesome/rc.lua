@@ -54,7 +54,6 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "unclutter -root" }) -- entries must be comma-separated
 run_once({"picom -b --config=$HOME/.config/picom.conf --no-use-damage"})
 awful.util.spawn("conky --config=" .. os.getenv("HOME") .. "/.config/conky_cfg/aw_conky")
 
@@ -283,21 +282,29 @@ end
 start_terminal_with_tmux()
 
 -- Spawn your terminals with unique WM_CLASS or window name
-awful.spawn('alacritty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
+awful.spawn('kitty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
 awful.spawn('alacritty --class Htop -e htop')
 awful.spawn('kitty --class WorkTerm')
+awful.spawn('kitty --class MainCava -e cava')
+awful.spawn('kitty --class BrowserCava -e cava', { floating = true, tag = awful.screen.focused().tags[3] })
 
 -- Place them when they appear
 client.connect_signal("manage", function(c)
     if c.class == "Unimatrix" then
         c.floating = true
-        c:geometry({ x = 30, y = 50, width = 960, height = 540 })
+        c:geometry({ x = 3366, y = 992, width = 457, height = 1092 })
     elseif c.class == "Htop" then
         c.floating = true
-        c:geometry({ x = 30, y = 1430, width = 580, height = 640 })
+        c:geometry({ x = 14, y = 1430, width = 665, height = 651 })
     elseif c.class == "WorkTerm" then
         c.floating = true
         c:geometry({ x = 700, y = 740, width = 2440, height = 1340 })
+    elseif c.class == "MainCava" then
+        c.floating = true
+        c:geometry({ x = 56, y = 43, width = 1472, height = 564 })
+    elseif c.class == "BrowserCava" then
+        c.floating = true
+        c:geometry({ x = 22, y = 43, width = 1503, height = 444 })
     end
 end)
 
@@ -691,7 +698,20 @@ globalkeys = awful.util.table.join(
     --]]
     -- Prompt
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"})
+              {description = "run prompt", group = "launcher"}),
+
+    awful.key({ modkey, "Shift" }, "g", function ()
+        local c = client.focus
+        if c then
+            local geo = c:geometry()
+            naughty.notify({
+                title = c.class or "Window",
+                text = string.format("x=%d, y=%d\nwidth=%d, height=%d", geo.x, geo.y, geo.width, geo.height),
+                timeout = 10
+            })
+        end
+    end,
+    {description = "show focused window geometry", group = "client"})
 
     -- awful.key({ modkey }, "x",
     --           function ()
