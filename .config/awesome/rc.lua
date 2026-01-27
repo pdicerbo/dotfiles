@@ -292,7 +292,7 @@ awful.spawn('kitty --class BrowserCava -e cava', { floating = true, tag = awful.
 client.connect_signal("manage", function(c)
     if c.class == "Unimatrix" then
         c.floating = true
-        c:geometry({ x = 3366, y = 992, width = 457, height = 1092 })
+        c:geometry({ x = 3159, y = 1430, width = 665, height = 651})
     elseif c.class == "Htop" then
         c.floating = true
         c:geometry({ x = 14, y = 1430, width = 665, height = 651 })
@@ -301,10 +301,10 @@ client.connect_signal("manage", function(c)
         c:geometry({ x = 700, y = 740, width = 2440, height = 1340 })
     elseif c.class == "MainCava" then
         c.floating = true
-        c:geometry({ x = 56, y = 43, width = 1472, height = 564 })
+        c:geometry({ x = 56, y = 43, width = 806, height = 289 })
     elseif c.class == "BrowserCava" then
         c.floating = true
-        c:geometry({ x = 22, y = 43, width = 1503, height = 444 })
+        c:geometry({ x = 22, y = 43, width = 806, height = 289 })
     end
 end)
 
