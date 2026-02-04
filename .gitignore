@@ -62,6 +62,7 @@ shared
 .devpod
 .docker
 .dotnet
+.eclipse
 .emacs.d
 .gk
 .gnome/
