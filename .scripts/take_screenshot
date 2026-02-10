@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DATE=$(date +%Y-%m-%d-%H-%M-%S)
+FNAME=$HOME/Pictures/screenshot_$DATE.png
+ksnip -f -p $FNAME
+if [ -f "$FNAME" ]; then
+    notify-send "Screenshot saved" "Saved to $FNAME"
+else
+    notify-send "Screenshot failed" "Could not save screenshot to $FNAME"
+fi

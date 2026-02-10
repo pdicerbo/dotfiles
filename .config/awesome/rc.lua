@@ -399,7 +399,7 @@ end
 globalkeys = awful.util.table.join(
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({                   }, "Print", function () awful.util.spawn("scrot -e 'mv $f " .. os.getenv("HOME")  .."/Images/Scrot/ 2>/dev/null'") end,
+    awful.key({                   }, "Print", function () awful.util.spawn("take_screenshot") end,
               {description = "take a screenshot", group = "hotkeys"}),
 
     -- toggle keyboard layout
