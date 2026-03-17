@@ -371,8 +371,8 @@ return {
         },
 
         keys = {
-            { "<leader>ac","<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }, desc = "Code Companion - Action Palette", },
-            { "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, { noremap = true, silent = true }, desc = "Code Companion - Toggle Chat Window"},
+            { "<leader>AC","<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true }, desc = "Code Companion - Action Palette", },
+            { "<leader>CC", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, { noremap = true, silent = true }, desc = "Code Companion - Toggle Chat Window"},
 
         },
     }
