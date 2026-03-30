@@ -39,6 +39,7 @@ shared
 .claude/
 .claude.json
 .config/aonix-walls
+.config/claude-devtools
 .config/Code
 .config/QtProject.conf
 .config/Thunar
