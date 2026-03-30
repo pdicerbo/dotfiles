@@ -111,6 +111,9 @@ return {
                     layout = {
                         preset = 'sidebar',
                         preview = false, ---@diagnostic disable-line
+                        layout = {
+                            width = 0.2,
+                        },
                     },
                     actions = {
                         toggle_preview = function(picker)

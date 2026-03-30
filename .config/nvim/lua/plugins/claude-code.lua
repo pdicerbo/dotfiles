@@ -3,10 +3,15 @@ return {
     dependencies = { "folke/snacks.nvim" },
     config = true,
     opts = {
-        terminal = {
-            provider = "native"
-        },
-    },
+		terminal = {
+			snacks_win_opts = {
+                wo = {
+                    winblend = 100,
+                    winhighlight = "NormalFloat:MyTransparentGroup",
+                }
+			},
+		},
+	},
     keys = {
         { "<leader>a", "",                                     desc = "AI/Claude Code", mode = { "n", "v" } },
         { "<leader>ac", "<cmd>ClaudeCode<cr>",                 desc = "Toggle Claude Code" },

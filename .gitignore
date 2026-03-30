@@ -36,6 +36,8 @@ shared
 .bash_history*
 .bash_logout
 .cache
+.claude/
+.claude.json
 .config/aonix-walls
 .config/Code
 .config/QtProject.conf
