@@ -2,6 +2,7 @@
 # ~/.bash_profile
 #
 export PATH=$PATH:$HOME/.scripts:$HOME/.local/bin:$HOME/.local/go/bin
+export npm_config_prefix="$HOME/.local"
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
