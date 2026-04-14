@@ -381,6 +381,26 @@ local function maximize_wallpaper(folder, wall_table)
     end
 end
 
+local function restore_last_wallpaper()
+    local idx = current_wall_indices[wallpapers_dir]
+    local wall_path
+    if idx and idx > 0 and wallpapers[idx] then
+        wall_path = wallpapers_dir .. "/" .. wallpapers[idx]
+    else
+        wall_path = os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg"
+    end
+    for s in screen do
+        gears.wallpaper.maximized(wall_path, s, true)
+    end
+    naughty.notify({
+        title = "Wallpaper Restored",
+        text = (idx and idx > 0 and wallpapers[idx])
+            and ("Wallpaper #" .. tostring(idx) .. ": " .. wallpapers[idx])
+            or "Default wallpaper",
+        timeout = 2
+    })
+end
+
 local current_layout = "us"
 
 local function toggle_keyboard_layout()
@@ -408,10 +428,10 @@ globalkeys = awful.util.table.join(
     -- cycle back and forth wallpapers
     awful.key({ altkey, "Shift" }, "Right", function() cycle_wallpaper(aonix_wall_dir, aonix_walls, 1) end, {description = "cycle AONIX wallpaper forward", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "Left", function() cycle_wallpaper(aonix_wall_dir, aonix_walls, -1) end, {description = "cycle AONIX wallpaper backward", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "j", function() cycle_wallpaper(wallpapers_dir, wallpapers, -1) end, {description = "cycle wallpaper backward", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "k", function() cycle_wallpaper(wallpapers_dir, wallpapers, 1) end, {description = "cycle wallpaper forward", group = "wallpaper"}),
+    awful.key({ altkey, "Shift" }, "b", function() cycle_wallpaper(wallpapers_dir, wallpapers, -1) end, {description = "cycle wallpaper backward", group = "wallpaper"}),
+    awful.key({ altkey, "Shift" }, "n", function() cycle_wallpaper(wallpapers_dir, wallpapers, 1) end, {description = "cycle wallpaper forward", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "p", function() prompt_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "prompt for AONIX wallpaper number", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "n", function() prompt_wallpaper(wallpapers_dir, wallpapers) end, {description = "prompt for wallpaper number", group = "wallpaper"}),
+    awful.key({ altkey, "Shift" }, "x", function() prompt_wallpaper(wallpapers_dir, wallpapers) end, {description = "prompt for wallpaper number", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "u", function() unmaximize_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "unmazimize AONIX wallpaper", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "m", function() maximize_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "mazimize AONIX wallpaper", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "r", function() unmaximize_wallpaper(wallpapers_dir, wallpapers) end, {description = "unmazimize wallpaper", group = "wallpaper"}),
@@ -507,19 +527,11 @@ globalkeys = awful.util.table.join(
         end,
         {description = "toggle wibox", group = "awesome"}),
 
-    awful.key({ altkey, "Shift" }, "w", function ()
-        for s in screen do
-            gears.wallpaper.maximized(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s, true)
-        end
-    end,
-   {description = "set default wallpaper", group = "wallpaper"}),
+    awful.key({ altkey, "Shift" }, "w", restore_last_wallpaper,
+   {description = "restore last wallpapers_dir wallpaper", group = "wallpaper"}),
 
-    awful.key({ modkey, "Shift" }, "w", function ()
-        for s in screen do
-            gears.wallpaper.maximized(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s, true)
-        end
-    end,
-   {description = "set default wallpaper", group = "wallpaper"}),
+    awful.key({ modkey, "Shift" }, "w", restore_last_wallpaper,
+   {description = "restore last wallpapers_dir wallpaper", group = "wallpaper"}),
 
     -- On the fly useless gaps change
     -- awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
