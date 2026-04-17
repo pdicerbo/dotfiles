@@ -401,6 +401,26 @@ local function restore_last_wallpaper()
     })
 end
 
+local function restore_last_aonix_wallpaper()
+    local idx = current_wall_indices[aonix_wall_dir]
+    local wall_path
+    if idx and idx > 0 and aonix_walls[idx] then
+        wall_path = aonix_wall_dir .. "/" .. aonix_walls[idx]
+    else
+        wall_path = os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg"
+    end
+    for s in screen do
+        gears.wallpaper.maximized(wall_path, s, true)
+    end
+    naughty.notify({
+        title = "Wallpaper Restored",
+        text = (idx and idx > 0 and aonix_walls[idx])
+            and ("Wallpaper #" .. tostring(idx) .. ": " .. aonix_walls[idx])
+            or "Default wallpaper",
+        timeout = 2
+    })
+end
+
 local current_layout = "us"
 
 local function toggle_keyboard_layout()
@@ -532,6 +552,9 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey, "Shift" }, "w", restore_last_wallpaper,
    {description = "restore last wallpapers_dir wallpaper", group = "wallpaper"}),
+
+    awful.key({ altkey, "Shift" }, "y", restore_last_aonix_wallpaper,
+   {description = "restore last aonix wallpaper", group = "wallpaper"}),
 
     -- On the fly useless gaps change
     -- awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
