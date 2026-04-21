@@ -45,31 +45,31 @@ return {
         end,
     },
 
-    -- {
-    --     "coder/claudecode.nvim",
-    --     dependencies = { "folke/snacks.nvim" },
-    --     config = true,
-    --     lazy = false,
-    --     opts = {
-    --         terminal = {
-    --             provider = "none",
-    --             snacks_win_opts = {
-    --                 wo = {
-    --                     winblend = 100,
-    --                     winhighlight = "NormalFloat:MyTransparentGroup",
-    --                 }
-    --             },
-    --         },
-    --         auto_start = true,
-    --     },
-    --     keys = {
-    --         { "<leader>A", "",                                     desc = "AI/Claude Code", mode = { "n", "v" } },
-    --         { "<leader>Am", "<cmd>ClaudeCodeSelectModel<cr>",      desc = "Select Claude Code model" },
-    --         -- Diff management
-    --         { "<leader>Aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
-    --         { "<leader>Ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
-    --     },
-    -- },
+    {
+        "coder/claudecode.nvim",
+        dependencies = { "folke/snacks.nvim" },
+        config = true,
+        lazy = false,
+        opts = {
+            auto_start = true,
+            terminal = {
+                provider = "none",
+                snacks_win_opts = {
+                    wo = {
+                        winblend = 100,
+                        winhighlight = "NormalFloat:MyTransparentGroup",
+                    }
+                },
+            },
+        },
+        keys = {
+            { "<leader>A", "",                                     desc = "AI/Claude Code", mode = { "n", "v" } },
+            { "<leader>Am", "<cmd>ClaudeCodeSelectModel<cr>",      desc = "Select Claude Code model" },
+            -- Diff management
+            { "<leader>Aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+            { "<leader>Ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+        },
+    },
 
     {
         "folke/sidekick.nvim",
