@@ -69,7 +69,7 @@ local themes = {
 local function get_wallpapers_from_dir(dir)
     local files = {}
     for file in io.popen('ls "' .. dir .. '"'):lines() do
-        if file:match("%.png$") or file:match("%.jpg$") then
+        if file:match("%.png$") or file:match("%.jpg$") or file:match("%.jpeg$") then
             table.insert(files, file)
         end
     end
@@ -374,13 +374,6 @@ local function unmaximize_wallpaper(folder, wall_table)
     end
 end
 
-local function maximize_wallpaper(folder, wall_table)
-    local idx = current_wall_indices[folder]
-    for s in screen do
-        gears.wallpaper.maximized(folder .. "/" .. wall_table[idx], s, true)
-    end
-end
-
 local function restore_last_wallpaper()
     local idx = current_wall_indices[wallpapers_dir]
     local wall_path
@@ -453,9 +446,7 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey, "Shift" }, "p", function() prompt_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "prompt for AONIX wallpaper number", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "x", function() prompt_wallpaper(wallpapers_dir, wallpapers) end, {description = "prompt for wallpaper number", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "u", function() unmaximize_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "unmazimize AONIX wallpaper", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "m", function() maximize_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "mazimize AONIX wallpaper", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "r", function() unmaximize_wallpaper(wallpapers_dir, wallpapers) end, {description = "unmazimize wallpaper", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "f", function() maximize_wallpaper(wallpapers_dir, wallpapers) end, {description = "maximize wallpaper", group = "wallpaper"}),
 
     -- Hotkeys
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
