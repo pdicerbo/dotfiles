@@ -13,7 +13,7 @@
   "copilot.vim": { "branch": "release", "commit": "a12fd5672110c8aa7e3c8419e28c96943ca179be" },
   "cppman.nvim": { "branch": "main", "commit": "801c5b178ee1246bc8ee044984d5758933b2baca" },
   "dark2026.nvim": { "branch": "master", "commit": "3fc6ca199a3537b46e49dbe5eed669fe9ff0d63e" },
-  "diffview.nvim": { "branch": "main", "commit": "58558f0fb84c474f714fb8bf72f71a56cce0f46b" },
+  "diffview.nvim": { "branch": "main", "commit": "2574deb6e4eaaf2ee2f98ea26dc018670a0c8547" },
   "dracula.nvim": { "branch": "main", "commit": "ae752c13e95fb7c5f58da4b5123cb804ea7568ee" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "dropbar.nvim": { "branch": "master", "commit": "f0a42bd92aa647e44221397723453403f5e20f16" },

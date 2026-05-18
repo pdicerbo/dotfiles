@@ -316,6 +316,19 @@ local current_wall_indices = {
     [wallpapers_dir] = 0,
 }
 
+function wall_picker_set(folder, path)
+    local wall_table = folder == aonix_wall_dir and aonix_walls or wallpapers
+    for i, name in ipairs(wall_table) do
+        if folder .. "/" .. name == path then
+            current_wall_indices[folder] = i
+            break
+        end
+    end
+    for s in screen do
+        gears.wallpaper.fit(path, s)
+    end
+end
+
 local function cycle_wallpaper(folder, wall_table, direction)
     direction = direction or 1
     local idx = current_wall_indices[folder]
@@ -546,6 +559,14 @@ globalkeys = awful.util.table.join(
 
     awful.key({ altkey, "Shift" }, "y", restore_last_aonix_wallpaper,
    {description = "restore last aonix wallpaper", group = "wallpaper"}),
+
+    awful.key({ altkey, "Shift" }, "i", function()
+        awful.spawn.with_shell(os.getenv("HOME") .. "/.scripts/wall-picker " .. os.getenv("HOME") .. "/.config/aonix-walls")
+    end, {description = "pick aonix wallpaper", group = "wallpaper"}),
+
+    awful.key({ altkey, "Shift" }, "o", function()
+        awful.spawn.with_shell(os.getenv("HOME") .. "/.scripts/wall-picker " .. os.getenv("HOME") .. "/.config/wallpapers")
+    end, {description = "pick wallpaper", group = "wallpaper"}),
 
     -- On the fly useless gaps change
     -- awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
