@@ -95,7 +95,8 @@ vim.keymap.set("n", "<leader>bb", "<cmd>b#<CR>", { desc = "Reopen latest buffer"
 vim.keymap.set("n", "<M-w>", "<cmd>tabclose<CR>", { desc = "Close current tab (Alt-w)" })
 
 -- Duplicate line or selection without copying to clipboard
-vim.keymap.set({ "n", "v" }, "<leader>dd", ":t.<CR>", { desc = "Duplicate line or selection without copying to clipboard" })
+vim.keymap.set("n", "<leader>dd", ":t.<CR>", { desc = "Duplicate line or selection without copying to clipboard" })
+vim.keymap.set("v", "<leader>dd", ":t'><CR>", { desc = "Duplicate line or selection without copying to clipboard" })
 
 vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
