@@ -33,6 +33,13 @@ vim.keymap.set("n", "<M-J>", "<C-w>j", { desc = "Move to bottom window" })
 vim.keymap.set("n", "<M-K>", "<C-w>k", { desc = "Move to top window" })
 vim.keymap.set("n", "<M-L>", "<C-w>l", { desc = "Move to right window" })
 
+-- same bindings in terminal mode: <C-\><C-n> exits terminal mode WITHOUT sending
+-- anything to the running process (unlike <Esc>, which Claude Code intercepts).
+vim.keymap.set("t", "<M-H>", "<C-\\><C-n><C-w>h", { desc = "Move to left window from terminal" })
+vim.keymap.set("t", "<M-J>", "<C-\\><C-n><C-w>j", { desc = "Move to bottom window from terminal" })
+vim.keymap.set("t", "<M-K>", "<C-\\><C-n><C-w>k", { desc = "Move to top window from terminal" })
+vim.keymap.set("t", "<M-L>", "<C-\\><C-n><C-w>l", { desc = "Move to right window from terminal" })
+
 -- Select all lines in buffer
 vim.keymap.set( "n", "<C-a>",       "gg<S-v>G", { desc = "Select all lines in buffer (overrides default <C-a> behavior, i.e. incrementing the number under cursor)" })
 
