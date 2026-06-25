@@ -54,6 +54,7 @@ shared
 .config/google-chrome
 .config/htop
 .config/ksnip
+.config/mozilla
 .config/menus
 .config/mimeapps.list*
 .config/pulse

@@ -93,7 +93,22 @@ vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
 vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
 
 -- toggle line wrap
-vim.keymap.set("n", "<leader>wl", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
+vim.keymap.set("n", "<leader>wl", function()
+    local diff_wins = {}
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if vim.wo[win].diff then
+            table.insert(diff_wins, win)
+        end
+    end
+    -- not in a diff? fall back to toggling just the current window
+    if #diff_wins == 0 then
+        diff_wins = { vim.api.nvim_get_current_win() }
+    end
+    local new_state = not vim.wo[diff_wins[1]].wrap
+    for _, win in ipairs(diff_wins) do
+        vim.wo[win].wrap = new_state
+    end
+end, { desc = "Toggle line wrap (both diff sides)" })
 
 -- reopen latest buffer (historically used)
 vim.keymap.set("n", "<leader>bb", "<cmd>b#<CR>", { desc = "Reopen latest buffer" })
