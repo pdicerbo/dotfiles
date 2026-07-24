@@ -34,6 +34,7 @@ for IMG_FILE in "${IMG_FILES[@]}"; do
 done
 
 SELECTED_INDEX=$(echo -en "$ROFI_INPUT" | rofi -dmenu \
+    -i \
     -show-icons \
     -theme "$ROFI_THEME" \
     -p "Select Wallpaper" \
