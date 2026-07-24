@@ -282,11 +282,13 @@ end
 start_terminal_with_tmux()
 
 -- Spawn your terminals with unique WM_CLASS or window name
-awful.spawn('kitty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
-awful.spawn('alacritty --class Htop -e htop')
-awful.spawn('kitty --class WorkTerm')
-awful.spawn('kitty --class MainCava -e cava')
-awful.spawn('kitty --class BrowserCava -e cava', { floating = true, tag = awful.screen.focused().tags[3] })
+local function spawn_side_terminals()
+    awful.spawn('kitty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
+    awful.spawn('alacritty --class Htop -e htop')
+    awful.spawn('kitty --class WorkTerm')
+    awful.spawn('kitty --class MainCava -e cava')
+    awful.spawn('kitty --class BrowserCava -e cava', { floating = true, tag = awful.screen.focused().tags[3] })
+end
 
 -- Place them when they appear
 client.connect_signal("manage", function(c)
@@ -596,6 +598,8 @@ globalkeys = awful.util.table.join(
           {description = "open a kitty instance", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "x", function () awful.spawn.with_shell("central_tdrop_toggle") end,
           {description = "toggle centralized urxvt dropdown terminal", group = "launcher"}),
+    awful.key({ modkey, "Control" }, "x", spawn_side_terminals,
+          {description = "spawn side terminals (Unimatrix/Htop/WorkTerm/Cava)", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
