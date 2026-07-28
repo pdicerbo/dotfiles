@@ -449,6 +449,8 @@ globalkeys = awful.util.table.join(
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
     awful.key({                   }, "Print", function () awful.util.spawn("take_screenshot") end,
               {description = "take a screenshot", group = "hotkeys"}),
+    awful.key({         "Shift" }, "Print", function () awful.util.spawn("snipping_tool") end,
+              {description = "take a screenshot", group = "hotkeys"}),
 
     -- toggle keyboard layout
     awful.key({ altkey, "Shift" }, "space", toggle_keyboard_layout, {description = "toggle keyboard layout", group = "hotkeys"}),
