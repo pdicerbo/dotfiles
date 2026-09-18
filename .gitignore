@@ -82,3 +82,5 @@ shared
 .viminfo*
 .vscode
 .themes.gitconfig
+.bashrc.secrets
+.config/cava/shaders/

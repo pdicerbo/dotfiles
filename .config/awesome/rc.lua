@@ -281,13 +281,16 @@ end
 -- Call the function on startup
 start_terminal_with_tmux()
 
--- Spawn your terminals with unique WM_CLASS or window name
+-- Spawn your terminals with unique WM_CLASS or window name.
+-- cava runs via the cava-launch wrapper: at session start pipewire-pulse is only
+-- socket-activated, so a cava that wins the race against WirePlumber's device
+-- enumeration dies with "Could not open pulseaudio source: @DEFAULT_SINK@.monitor".
 local function spawn_side_terminals()
     awful.spawn('kitty --class Unimatrix -e unimatrix -ab -c blue -s 93 -l naASCG')
     awful.spawn('alacritty --class Htop -e htop')
     awful.spawn('kitty --class WorkTerm')
-    awful.spawn('kitty --class MainCava -e cava')
-    awful.spawn('kitty --class BrowserCava -e cava', { floating = true, tag = awful.screen.focused().tags[3] })
+    awful.spawn('kitty --class MainCava -e cava-launch')
+    awful.spawn('kitty --class BrowserCava -e cava-launch', { floating = true, tag = awful.screen.focused().tags[3] })
 end
 
 -- Place them when they appear

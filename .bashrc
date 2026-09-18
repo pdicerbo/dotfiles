@@ -48,5 +48,7 @@ fi
 
 # setxkbmap -option compose:rwin
 
+# Secrets are kept outside the repo, in an untracked file
+[ -f "$HOME/.bashrc.secrets" ] && . "$HOME/.bashrc.secrets"
 export GOPATH=$HOME/.local/go
 fastfetch

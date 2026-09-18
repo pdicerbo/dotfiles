@@ -1,0 +1,39 @@
+#!/bin/sh
+# Start cava only once PulseAudio/PipeWire can actually resolve a default sink.
+#
+# Why: pipewire-pulse is socket-activated. At session start the socket is
+# listening but the daemon is not running, so the first audio client both
+# triggers the daemon AND races WirePlumber's device enumeration. cava is
+# configured with "source = auto", which asks for @DEFAULT_SINK@.monitor; if
+# that name is not registered yet cava dies with
+#   input/pulse.c: Could not open pulseaudio source: @DEFAULT_SINK@.monitor,
+#   No such entity.
+# Whichever of the two cava instances loses that race silently vanishes.
+
+# Wait (max ~20s) for the default sink and its monitor source to exist.
+i=0
+while [ "$i" -lt 100 ]; do
+    sink=$(pactl get-default-sink 2>/dev/null)
+    case "$sink" in
+        '' | @*) ;;   # unset, or still the literal @DEFAULT_SINK@ placeholder
+        *)
+            if pactl list short sources 2>/dev/null | grep -qF "${sink}.monitor"; then
+                break
+            fi
+            ;;
+    esac
+    i=$((i + 1))
+    sleep 0.2
+done
+
+# Belt and braces: if cava still fails (transient device reconfiguration),
+# retry a couple of times instead of letting the window disappear.
+n=0
+while :; do
+    cava "$@"
+    rc=$?
+    [ "$rc" -eq 0 ] && exit 0
+    n=$((n + 1))
+    [ "$n" -ge 3 ] && exit "$rc"
+    sleep 1
+done
