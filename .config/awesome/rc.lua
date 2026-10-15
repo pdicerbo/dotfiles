@@ -567,19 +567,13 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey, "Shift" }, "y", restore_last_aonix_wallpaper,
    {description = "restore last aonix wallpaper", group = "wallpaper"}),
 
-    awful.key({ altkey, "Shift" }, "i", function()
+    awful.key({ modkey, "Shift" }, "h", function()
         awful.spawn.with_shell(os.getenv("HOME") .. "/.scripts/wall-picker " .. os.getenv("HOME") .. "/.config/aonix-walls")
     end, {description = "pick aonix wallpaper", group = "wallpaper"}),
 
-    awful.key({ altkey, "Shift" }, "o", function()
+    awful.key({ modkey, "Shift" }, "e", function()
         awful.spawn.with_shell(os.getenv("HOME") .. "/.scripts/wall-picker " .. os.getenv("HOME") .. "/.config/wallpapers")
     end, {description = "pick wallpaper", group = "wallpaper"}),
-
-    -- On the fly useless gaps change
-    -- awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
-    --           {description = "increment useless gaps", group = "tag"}),
-    -- awful.key({ altkey, "Control" }, "-", function () lain.util.useless_gaps_resize(-1) end,
-    --           {description = "decrement useless gaps", group = "tag"}),
 
     -- Dynamic tagging
     awful.key({ modkey, "Shift" }, "n", function () lain.util.add_tag() end,
@@ -596,9 +590,6 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    -- awful.key({ modkey }, "x", function () awful.spawn("urxvt -geometry 350x100 -e tmux", { floating  = true, placement = awful.placement.centered, }) end,
-    -- awful.key({ modkey }, "x", function () awful.spawn("alacritty -o 'window.dimensions = { columns = 350, lines = 100 }' -e tmux", { floating  = true, placement = awful.placement.centered, }) end,
-    --      {description = "open a tmux session into a bigger alacritty terminal", group = "launcher"}),
     awful.key({ modkey }, "x", function () awful.spawn("kitty -o initial_window_width=2500 -o initial_window_height=1500 -o remember_window_size=no", { floating  = true, placement = awful.placement.centered, }) end,
           {description = "open a kitty instance", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "x", function () awful.spawn.with_shell("central_tdrop_toggle") end,
@@ -610,18 +601,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
-              {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
-              {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-              {description = "increase the number of columns", group = "layout"}),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-              {description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,

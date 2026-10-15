@@ -1,6 +1,7 @@
 gui:
-  authorColors:
-    'Pierluigi Di Cerbo': 'blue'
+  theme:
+    authorColors:
+      'Pierluigi Di Cerbo': 'blue'
 git:
   autoStageResolvedConflicts: false
   commit:
