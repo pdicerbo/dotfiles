@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
 WALLPAPER_DIR="${1:-$HOME/.config/wallpapers}"
+WALLPAPER_DIR="${WALLPAPER_DIR%/}"
 ROFI_THEME="$HOME/.config/rofi/launcher/style.rasi"
-CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/wall-picker/thumbnails"
+# one cache per wallpaper folder, so images with the same name in different folders don't share a thumbnail
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/wall-picker/thumbnails/$(basename "$WALLPAPER_DIR")"
 THUMB_SIZE="400x400"
 
 mkdir -p "$CACHE_DIR"
 
-mapfile -t IMG_FILES < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" -o -iname "*.webp" \))
+mapfile -t IMG_FILES < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" \))
 
 if [ "${#IMG_FILES[@]}" -eq 0 ]; then
     notify-send "wall-picker" "No images found in $WALLPAPER_DIR"
@@ -15,6 +17,7 @@ if [ "${#IMG_FILES[@]}" -eq 0 ]; then
 fi
 
 ROFI_INPUT=""
+declare -A USED_THUMBS
 for IMG_FILE in "${IMG_FILES[@]}"; do
     BASENAME=$(basename "$IMG_FILE")
     NAME_WITHOUT_EXT="${BASENAME%.*}"
@@ -30,7 +33,13 @@ for IMG_FILE in "${IMG_FILES[@]}"; do
     if [ ! -f "$THUMB_FILE" ]; then
         convert "$IMG_FILE" -auto-orient -thumbnail "${THUMB_SIZE}^" -gravity center -extent "$THUMB_SIZE" "$THUMB_FILE"
     fi
+    USED_THUMBS["$THUMB_FILE"]=1
     ROFI_INPUT+="${DISPLAY_NAME}\0icon\x1f${THUMB_FILE}\0info\x1f${IMG_FILE}\n"
+done
+
+# drop thumbnails of images that no longer exist
+for THUMB_FILE in "$CACHE_DIR"/*.png; do
+    [ -n "${USED_THUMBS[$THUMB_FILE]}" ] || rm -f -- "$THUMB_FILE"
 done
 
 SELECTED_INDEX=$(echo -en "$ROFI_INPUT" | rofi -dmenu \

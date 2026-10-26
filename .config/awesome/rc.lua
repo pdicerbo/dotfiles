@@ -68,11 +68,14 @@ local themes = {
 -- special walls management
 local function get_wallpapers_from_dir(dir)
     local files = {}
-    for file in io.popen('ls "' .. dir .. '"'):lines() do
-        if file:match("%.png$") or file:match("%.jpg$") or file:match("%.jpeg$") then
+    local handle = io.popen('ls "' .. dir .. '"')
+    for file in handle:lines() do
+        local lower = file:lower()
+        if lower:match("%.png$") or lower:match("%.jpg$") or lower:match("%.jpeg$") then
             table.insert(files, file)
         end
     end
+    handle:close()
     return files
 end
 
@@ -250,7 +253,7 @@ screen.connect_signal("property::geometry", function(s)
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
+        gears.wallpaper.fit(wallpaper, s)
     end
 end)
 -- Create a wibox for each screen and add it
@@ -320,8 +323,11 @@ local current_wall_indices = {
     [aonix_wall_dir] = 0,
     [wallpapers_dir] = 0,
 }
+-- folder of the wallpaper last set by hand, restored when a wallpaper trial ends
+local last_wall_folder = wallpapers_dir
 
 function wall_picker_set(folder, path)
+    last_wall_folder = folder
     local wall_table = folder == aonix_wall_dir and aonix_walls or wallpapers
     for i, name in ipairs(wall_table) do
         if folder .. "/" .. name == path then
@@ -340,11 +346,12 @@ local function cycle_wallpaper(folder, wall_table, direction)
     local count = #wall_table
     idx = (idx + direction) % (count + 1)
     current_wall_indices[folder] = idx
+    last_wall_folder = folder
     for s in screen do
         if idx == 0 then
-            gears.wallpaper.maximized(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s, true)
+            gears.wallpaper.fit(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s)
         else
-            gears.wallpaper.maximized(folder .. "/" .. wall_table[idx], s, true)
+            gears.wallpaper.fit(folder .. "/" .. wall_table[idx], s)
         end
     end
     naughty.notify({
@@ -362,11 +369,12 @@ local function prompt_wallpaper(folder, wall_table)
             local idx = tonumber(input)
             if idx and idx >= 0 and idx <= #wall_table then
                 current_wall_indices[folder] = idx
+                last_wall_folder = folder
                 for s in screen do
                     if idx == 0 then
-                        gears.wallpaper.maximized(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s, true)
+                        gears.wallpaper.fit(os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg", s)
                     else
-                        gears.wallpaper.maximized(folder .. "/" .. wall_table[idx], s, true)
+                        gears.wallpaper.fit(folder .. "/" .. wall_table[idx], s)
                     end
                 end
                 naughty.notify({
@@ -385,13 +393,6 @@ local function prompt_wallpaper(folder, wall_table)
     }
 end
 
-local function unmaximize_wallpaper(folder, wall_table)
-    local idx = current_wall_indices[folder]
-    for s in screen do
-        gears.wallpaper.fit(folder .. "/" .. wall_table[idx], s)
-    end
-end
-
 local function restore_last_wallpaper()
     local idx = current_wall_indices[wallpapers_dir]
     local wall_path
@@ -401,7 +402,7 @@ local function restore_last_wallpaper()
         wall_path = os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg"
     end
     for s in screen do
-        gears.wallpaper.maximized(wall_path, s, true)
+        gears.wallpaper.fit(wall_path, s)
     end
     naughty.notify({
         title = "Wallpaper Restored",
@@ -421,7 +422,7 @@ local function restore_last_aonix_wallpaper()
         wall_path = os.getenv("HOME") .. "/.config/awesome/themes/zenburn/wall.jpg"
     end
     for s in screen do
-        gears.wallpaper.maximized(wall_path, s, true)
+        gears.wallpaper.fit(wall_path, s)
     end
     naughty.notify({
         title = "Wallpaper Restored",
@@ -430,6 +431,44 @@ local function restore_last_aonix_wallpaper()
             or "Default wallpaper",
         timeout = 2
     })
+end
+
+-- Wallpaper trial: driven by ~/.scripts/wall-trial through awesome-client
+local wall_trial = os.getenv("HOME") .. "/.scripts/wall-trial"
+
+function wall_trial_show(path)
+    for s in screen do
+        gears.wallpaper.fit(path, s)
+    end
+end
+
+-- an image was just moved into folder: rescan both folders, keeping each one's
+-- current wallpaper, and make the accepted image the current one of its folder
+function wall_trial_accept(folder, path)
+    local function index_of(wall_table, name)
+        for i, n in ipairs(wall_table) do
+            if n == name then return i end
+        end
+        return 0
+    end
+    local old_aonix = aonix_walls[current_wall_indices[aonix_wall_dir]]
+    local old_wall = wallpapers[current_wall_indices[wallpapers_dir]]
+    aonix_walls = get_wallpapers_from_dir(aonix_wall_dir)
+    wallpapers = get_wallpapers_from_dir(wallpapers_dir)
+    current_wall_indices[aonix_wall_dir] = index_of(aonix_walls, old_aonix)
+    current_wall_indices[wallpapers_dir] = index_of(wallpapers, old_wall)
+
+    local wall_table = folder == aonix_wall_dir and aonix_walls or wallpapers
+    current_wall_indices[folder] = index_of(wall_table, path:match("[^/]+$"))
+    last_wall_folder = folder
+end
+
+function wall_trial_restore()
+    if last_wall_folder == aonix_wall_dir then
+        restore_last_aonix_wallpaper()
+    else
+        restore_last_wallpaper()
+    end
 end
 
 local current_layout = "us"
@@ -465,8 +504,6 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey, "Shift" }, "n", function() cycle_wallpaper(wallpapers_dir, wallpapers, 1) end, {description = "cycle wallpaper forward", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "p", function() prompt_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "prompt for AONIX wallpaper number", group = "wallpaper"}),
     awful.key({ altkey, "Shift" }, "x", function() prompt_wallpaper(wallpapers_dir, wallpapers) end, {description = "prompt for wallpaper number", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "u", function() unmaximize_wallpaper(aonix_wall_dir, aonix_walls) end, {description = "unmazimize AONIX wallpaper", group = "wallpaper"}),
-    awful.key({ altkey, "Shift" }, "r", function() unmaximize_wallpaper(wallpapers_dir, wallpapers) end, {description = "unmazimize wallpaper", group = "wallpaper"}),
 
     -- Hotkeys
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -574,6 +611,18 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "e", function()
         awful.spawn.with_shell(os.getenv("HOME") .. "/.scripts/wall-picker " .. os.getenv("HOME") .. "/.config/wallpapers")
     end, {description = "pick wallpaper", group = "wallpaper"}),
+
+    -- Wallpaper trial (start it with: wall-trial [dir]); these do nothing when no trial is running
+    awful.key({ modkey, "Control" }, "y", function() awful.spawn({ wall_trial, "accept", "walls" }) end,
+              {description = "trial: keep image in wallpapers", group = "wallpaper trial"}),
+    awful.key({ modkey, "Control" }, "h", function() awful.spawn({ wall_trial, "accept", "aonix" }) end,
+              {description = "trial: keep image in aonix-walls", group = "wallpaper trial"}),
+    awful.key({ modkey, "Control" }, "d", function() awful.spawn({ wall_trial, "reject" }) end,
+              {description = "trial: delete image", group = "wallpaper trial"}),
+    awful.key({ modkey, "Control" }, "s", function() awful.spawn({ wall_trial, "skip" }) end,
+              {description = "trial: skip image", group = "wallpaper trial"}),
+    awful.key({ modkey, "Control" }, "Escape", function() awful.spawn({ wall_trial, "abort" }) end,
+              {description = "trial: quit and restore wallpaper", group = "wallpaper trial"}),
 
     -- Dynamic tagging
     awful.key({ modkey, "Shift" }, "n", function () lain.util.add_tag() end,
